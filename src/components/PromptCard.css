@@ -7,7 +7,7 @@
   margin: 20px auto;
   text-align: center;
   background-color: #fff;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
 .prompt-content {
@@ -24,7 +24,8 @@
 
 .shuffle-button,
 .thumbs-up-button,
-.thumbs-down-button {
+.thumbs-down-button,
+.reset-button {
   padding: 8px 16px;
   font-size: 1em;
   cursor: pointer;
@@ -60,6 +61,16 @@
   background-color: #c82333;
 }
 
+.reset-button {
+  background-color: #6c757d;
+  color: #fff;
+  margin-top: 12px;
+}
+
+.reset-button:hover {
+  background-color: #5a6268;
+}
+
 /* Styles for response container and card */
 .response-container {
   display: flex;
@@ -78,10 +89,10 @@
   padding: 16px;
   color: #333;
   width: 100%;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
-/* Styles for slider container */
+/* Styles for slider container and labels */
 .slider-container {
   width: 100%;
   display: flex;

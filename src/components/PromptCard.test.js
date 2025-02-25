@@ -124,5 +124,41 @@ describe('PromptCard Component', () => {
     });
     expect(consoleLogSpy).toHaveBeenCalledWith('Backend API Response:', mockResponseData);
   });
-  
+    test('resets to initial state when reset button is clicked', async () => {
+    const mockResponseData = {
+      outputs: {
+        level_1: "Test level 1",
+        level_2: "Test level 2",
+        level_3: "Test level 3",
+        level_4: "Test level 4",
+        level_5: "Test level 5",
+        level_6: "Test level 6"
+      }
+    };
+    global.fetch.mockResolvedValueOnce({
+      ok: true,
+      json: jest.fn().mockResolvedValue(mockResponseData)
+    });
+    render(<PromptCard />);
+    const thumbsUpButton = screen.getByRole('button', { name: /👍/i });
+    fireEvent.click(thumbsUpButton);
+
+    // Wait for response view to appear
+    await waitFor(() => {
+      expect(screen.getByTestId('response-card-level_1')).toBeInTheDocument();
+    });
+
+    // Click the reset button
+    const resetButton = screen.getByRole('button', { name: /reset/i });
+    expect(resetButton).toBeInTheDocument();
+    fireEvent.click(resetButton);
+
+    // After reset, prompt card should be visible again
+    await waitFor(() => {
+      expect(screen.getByTestId('prompt-content')).toBeInTheDocument();
+    });
+    // Slider and response card should no longer be visible
+    expect(screen.queryByTestId('level-slider')).toBeNull();
+    expect(screen.queryByTestId('response-card-level_1')).toBeNull();
+  });
 });
