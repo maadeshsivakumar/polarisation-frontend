@@ -15,18 +15,31 @@ const predefinedPrompts = [
     "Stricter immigration policies are needed to safeguard national security and preserve our cultural identity."
 ];
 
+// Define a color mapping for each polarization level (increasing intensity)
+const levelColors = {
+    level_1: "#ffe6e6", // lightest
+    level_2: "#ffcccc",
+    level_3: "#ffb3b3",
+    level_4: "#ff9999",
+    level_5: "#ff8080",
+    level_6: "#ff6666"  // most intense
+};
+
 const PromptCard = () => {
     const [currentPromptIndex, setCurrentPromptIndex] = useState(0);
+    const [backendResponse, setBackendResponse] = useState(null);
+    const [currentLevel, setCurrentLevel] = useState(1);
 
     const handleShuffle = () => {
         setCurrentPromptIndex((prevIndex) => (prevIndex + 1) % predefinedPrompts.length);
+        // Clear previous backend response if any
+        setBackendResponse(null);
     };
 
     const handleFeedback = async (feedbackValue) => {
-        // Prepare payload with the current prompt and the provided feedback
         const payload = {
             text: predefinedPrompts[currentPromptIndex],
-            feedback: feedbackValue, // true for thumbs up, false for thumbs down
+            feedback: feedbackValue,
         };
 
         try {
@@ -42,6 +55,8 @@ const PromptCard = () => {
             }
             const data = await response.json();
             console.log('Backend API Response:', data);
+            setBackendResponse(data.outputs);
+            setCurrentLevel(1);
         } catch (error) {
             console.error('Error calling backend API:', error);
         }
@@ -54,6 +69,34 @@ const PromptCard = () => {
     const handleThumbsDown = () => {
         handleFeedback(false);
     };
+
+    const renderResponseCards = () => {
+        // Render all response cards (for testing or future extension)
+        return Object.entries(backendResponse).map(([level, text]) => (
+            <div
+                key={level}
+                className="response-card"
+                data-testid={`response-card-${level}`}
+                style={{ backgroundColor: levelColors[level] }}
+            >
+                <h3>{level.replace('_', ' ').toUpperCase()}</h3>
+                <p>{text}</p>
+            </div>
+        ));
+    };
+
+    // If backend response exists, show the response cards and (later) slider
+    if (backendResponse) {
+        const levelKey = `level_${currentLevel}`;
+        return (
+            <div className="response-container" style={{ backgroundColor: levelColors[levelKey] }}>
+                <div className="response-card" data-testid={`response-card-${levelKey}`}>
+                    <h3>{levelKey.replace('_', ' ').toUpperCase()}</h3>
+                    <p>{backendResponse[levelKey]}</p>
+                </div>
+            </div>
+        );
+    }
 
     return (
         <div className="prompt-card">

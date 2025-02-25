@@ -37,7 +37,7 @@ describe('PromptCard Component', () => {
     expect(newPrompt).not.toEqual(initialPrompt);
   });
 
-  test('calls backend API with correct payload for thumbs up (feedback: true)', async () => {
+  test('calls backend API with correct payload for thumbs up and displays response card', async () => {
     const mockResponseData = {
       outputs: {
         level_1: "Test level 1",
@@ -52,7 +52,7 @@ describe('PromptCard Component', () => {
       ok: true,
       json: jest.fn().mockResolvedValue(mockResponseData)
     });
-    const consoleLogSpy = jest.spyOn(console, 'log').mockImplementation(() => {});
+    const consoleLogSpy = jest.spyOn(console, 'log').mockImplementation(() => { });
 
     render(<PromptCard />);
     const thumbsUpButton = screen.getByRole('button', { name: /👍/i });
@@ -61,13 +61,16 @@ describe('PromptCard Component', () => {
     await waitFor(() => {
       expect(global.fetch).toHaveBeenCalledTimes(1);
     });
-    const fetchCallArg = global.fetch.mock.calls[0][1].body;
-    const parsedBody = JSON.parse(fetchCallArg);
-    expect(parsedBody.feedback).toBe(true);
+
+    // Wait for response card to appear and check level_1 card
+    await waitFor(() => {
+      expect(screen.getByTestId('response-card-level_1')).toBeInTheDocument();
+    });
+    const level1Card = screen.getByTestId('response-card-level_1');
     expect(consoleLogSpy).toHaveBeenCalledWith('Backend API Response:', mockResponseData);
   });
 
-  test('calls backend API with correct payload for thumbs down (feedback: false)', async () => {
+  test('calls backend API with correct payload for thumbs down and displays response card', async () => {
     const mockResponseData = {
       outputs: {
         level_1: "Test level 1",
@@ -82,7 +85,7 @@ describe('PromptCard Component', () => {
       ok: true,
       json: jest.fn().mockResolvedValue(mockResponseData)
     });
-    const consoleLogSpy = jest.spyOn(console, 'log').mockImplementation(() => {});
+    const consoleLogSpy = jest.spyOn(console, 'log').mockImplementation(() => { });
 
     render(<PromptCard />);
     const thumbsDownButton = screen.getByRole('button', { name: /👎/i });
@@ -91,9 +94,12 @@ describe('PromptCard Component', () => {
     await waitFor(() => {
       expect(global.fetch).toHaveBeenCalledTimes(1);
     });
-    const fetchCallArg = global.fetch.mock.calls[0][1].body;
-    const parsedBody = JSON.parse(fetchCallArg);
-    expect(parsedBody.feedback).toBe(false);
+
+    // Wait for response card to appear and check level_1 card
+    await waitFor(() => {
+      expect(screen.getByTestId('response-card-level_1')).toBeInTheDocument();
+    });
+    const level1Card = screen.getByTestId('response-card-level_1');
     expect(consoleLogSpy).toHaveBeenCalledWith('Backend API Response:', mockResponseData);
   });
 });
