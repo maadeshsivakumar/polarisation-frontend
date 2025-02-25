@@ -17,12 +17,12 @@ const predefinedPrompts = [
 
 // Define a color mapping for each polarization level (increasing intensity)
 const levelColors = {
-    level_1: "#ffe6e6", // lightest
+    level_1: "#ffe6e6",
     level_2: "#ffcccc",
     level_3: "#ffb3b3",
     level_4: "#ff9999",
     level_5: "#ff8080",
-    level_6: "#ff6666"  // most intense
+    level_6: "#ff6666",
 };
 
 const PromptCard = () => {
@@ -70,22 +70,11 @@ const PromptCard = () => {
         handleFeedback(false);
     };
 
-    const renderResponseCards = () => {
-        // Render all response cards (for testing or future extension)
-        return Object.entries(backendResponse).map(([level, text]) => (
-            <div
-                key={level}
-                className="response-card"
-                data-testid={`response-card-${level}`}
-                style={{ backgroundColor: levelColors[level] }}
-            >
-                <h3>{level.replace('_', ' ').toUpperCase()}</h3>
-                <p>{text}</p>
-            </div>
-        ));
+    const handleSliderChange = (event) => {
+        setCurrentLevel(Number(event.target.value));
     };
 
-    // If backend response exists, show the response cards and (later) slider
+    // If backend response exists, show slider and display only the card for the selected level.
     if (backendResponse) {
         const levelKey = `level_${currentLevel}`;
         return (
@@ -94,10 +83,25 @@ const PromptCard = () => {
                     <h3>{levelKey.replace('_', ' ').toUpperCase()}</h3>
                     <p>{backendResponse[levelKey]}</p>
                 </div>
+                <div className="slider-container">
+                    <input
+                        type="range"
+                        min="1"
+                        max="6"
+                        value={currentLevel}
+                        onChange={handleSliderChange}
+                        data-testid="level-slider"
+                    />
+                    <div className="slider-labels">
+                        <span>Level 1</span>
+                        <span>Level 6</span>
+                    </div>
+                </div>
             </div>
         );
     }
 
+    // Otherwise, show the initial prompt card with buttons.
     return (
         <div className="prompt-card">
             <div className="prompt-content" data-testid="prompt-content">

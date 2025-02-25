@@ -37,7 +37,7 @@ describe('PromptCard Component', () => {
     expect(newPrompt).not.toEqual(initialPrompt);
   });
 
-  test('calls backend API with correct payload for thumbs up and displays response card', async () => {
+  test('calls backend API with correct payload for thumbs up and displays response with slider functionality', async () => {
     const mockResponseData = {
       outputs: {
         level_1: "Test level 1",
@@ -62,15 +62,26 @@ describe('PromptCard Component', () => {
       expect(global.fetch).toHaveBeenCalledTimes(1);
     });
 
-    // Wait for response card to appear and check level_1 card
+    // Check that slider appears
+    const slider = await screen.findByTestId('level-slider');
+    expect(slider).toBeInTheDocument();
+
+    // Initially, currentLevel is 1: check for level_1 response card
     await waitFor(() => {
       expect(screen.getByTestId('response-card-level_1')).toBeInTheDocument();
     });
     const level1Card = screen.getByTestId('response-card-level_1');
+
+    // Change slider value to 4
+    fireEvent.change(slider, { target: { value: '4' } });
+    await waitFor(() => {
+      const level4Card = screen.getByTestId('response-card-level_4');
+      expect(level4Card).toBeInTheDocument();
+    });
     expect(consoleLogSpy).toHaveBeenCalledWith('Backend API Response:', mockResponseData);
   });
 
-  test('calls backend API with correct payload for thumbs down and displays response card', async () => {
+  test('calls backend API with correct payload for thumbs down and displays response with slider functionality', async () => {
     const mockResponseData = {
       outputs: {
         level_1: "Test level 1",
@@ -95,11 +106,23 @@ describe('PromptCard Component', () => {
       expect(global.fetch).toHaveBeenCalledTimes(1);
     });
 
-    // Wait for response card to appear and check level_1 card
+    // Check that slider appears
+    const slider = await screen.findByTestId('level-slider');
+    expect(slider).toBeInTheDocument();
+
+    // Initially, currentLevel is 1: check for level_1 response card
     await waitFor(() => {
       expect(screen.getByTestId('response-card-level_1')).toBeInTheDocument();
     });
     const level1Card = screen.getByTestId('response-card-level_1');
+
+    // Change slider value to 6
+    fireEvent.change(slider, { target: { value: '6' } });
+    await waitFor(() => {
+      const level6Card = screen.getByTestId('response-card-level_6');
+      expect(level6Card).toBeInTheDocument();
+    });
     expect(consoleLogSpy).toHaveBeenCalledWith('Backend API Response:', mockResponseData);
   });
+  
 });
