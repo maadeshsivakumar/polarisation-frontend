@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/polarisation-frontend/static/css/main.61cbe2ff.css",
+    "main.js": "/polarisation-frontend/static/js/main.b1fd6bbd.js",
+    "index.html": "/polarisation-frontend/index.html",
+    "main.61cbe2ff.css.map": "/polarisation-frontend/static/css/main.61cbe2ff.css.map",
+    "main.b1fd6bbd.js.map": "/polarisation-frontend/static/js/main.b1fd6bbd.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.61cbe2ff.css",
+    "static/js/main.b1fd6bbd.js"
+  ]
+}
