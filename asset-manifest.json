@@ -1,13 +1,13 @@
 {
   "files": {
-    "main.css": "/polarisation-frontend/static/css/main.61cbe2ff.css",
-    "main.js": "/polarisation-frontend/static/js/main.b1fd6bbd.js",
+    "main.css": "/polarisation-frontend/static/css/main.ed3dc0d9.css",
+    "main.js": "/polarisation-frontend/static/js/main.49a542d5.js",
     "index.html": "/polarisation-frontend/index.html",
-    "main.61cbe2ff.css.map": "/polarisation-frontend/static/css/main.61cbe2ff.css.map",
-    "main.b1fd6bbd.js.map": "/polarisation-frontend/static/js/main.b1fd6bbd.js.map"
+    "main.ed3dc0d9.css.map": "/polarisation-frontend/static/css/main.ed3dc0d9.css.map",
+    "main.49a542d5.js.map": "/polarisation-frontend/static/js/main.49a542d5.js.map"
   },
   "entrypoints": [
-    "static/css/main.61cbe2ff.css",
-    "static/js/main.b1fd6bbd.js"
+    "static/css/main.ed3dc0d9.css",
+    "static/js/main.49a542d5.js"
   ]
 }
