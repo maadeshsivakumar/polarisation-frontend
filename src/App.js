@@ -18,11 +18,6 @@ function App() {
         console.log("Backend warmed up:", response.status);
         setBackendWarmed(true);
       })
-      .catch(error => {
-        console.error("Error warming up backend:", error);
-        // Even if the ping fails, allow user interaction after a delay
-        setTimeout(() => setBackendWarmed(true), 3000);
-      });
   }, []);
 
   return (
@@ -37,20 +32,17 @@ function App() {
       </header>
 
       <p className="note">
-        Heads up: The very first request might be fashionably late as my backend shakes off its sleep. 
+        Heads up: The very first request might be fashionably late (~1 minute) as the backend shakes off its sleep.
         For now, I only have servers that operate on a strict "hibernate and hope" schedule :'(
         Thank you for your patience !
       </p>
-
-      {!backendWarmed ? (
+      < PromptCard />
+      {!backendWarmed && (
         <div className="loading">
           <p>Warming up backend...</p>
           <div className="spinner"></div>
         </div>
-      ) : (
-        <PromptCard />
       )}
-
     </div>
   );
 }

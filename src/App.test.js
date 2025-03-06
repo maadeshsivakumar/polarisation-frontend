@@ -12,7 +12,7 @@ describe('App Component', () => {
     global.fetch.mockRestore();
   });
 
-  test('displays loading spinner during backend warmup and then renders PromptCard', async () => {
+  test('displays loading spinner during backend warmup and then removes', async () => {
     // Simulate a successful backend ping
     global.fetch.mockResolvedValueOnce({
       status: 200,
@@ -27,28 +27,7 @@ describe('App Component', () => {
 
     // Wait until the backend is warmed (PromptCard is rendered)
     await waitFor(() => {
-      expect(screen.getByTestId('prompt-content')).toBeInTheDocument();
+      expect(screen.queryByText(/warming up backend/i)).toBeNull();
     });
-
-    // The loading spinner should no longer be visible
-    expect(screen.queryByText(/warming up backend/i)).toBeNull();
-  });
-
-  test('handles backend warmup failure and still renders PromptCard after delay', async () => {
-    // Simulate a backend ping failure
-    global.fetch.mockRejectedValueOnce(new Error('Backend error'));
-    
-    render(<App />);
-
-    // Initially, the loading indicator should be visible
-    expect(screen.getByText(/warming up backend/i)).toBeInTheDocument();
-
-    // Even if the ping fails, after the delay the PromptCard should be rendered
-    await waitFor(() => {
-      expect(screen.getByTestId('prompt-content')).toBeInTheDocument();
-    }, { timeout: 4000 });
-
-    // The loading spinner should be removed after the delay
-    expect(screen.queryByText(/warming up backend/i)).toBeNull();
   });
 });
